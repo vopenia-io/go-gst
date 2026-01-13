@@ -55,7 +55,7 @@ func goGstPadActivateModeFunction(pad *C.GstPad, parent *C.GstObject, mode C.Gst
 //export goGstPadChainFunction
 func goGstPadChainFunction(pad *C.GstPad, parent *C.GstObject, buffer *C.GstBuffer) C.GstFlowReturn {
 	f := padChainFuncs.FuncForPad(unsafe.Pointer(pad)).(PadChainFunc)
-	buf := FromGstBufferUnsafeFull(unsafe.Pointer(buffer))
+	buf := wrapBuffer(buffer)
 	defer buf.Unref()
 	return C.GstFlowReturn(f(
 		wrapPad(toGObject(unsafe.Pointer(pad))),
