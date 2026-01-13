@@ -2,6 +2,10 @@ package gst
 
 /*
 #include "gst.go.h"
+
+GType go_gst_class_get_type(gpointer klass) {
+	return G_TYPE_FROM_CLASS(klass);
+}
 */
 import "C"
 import (
@@ -108,4 +112,9 @@ func (e *ElementClass) SetMetadata(longname, classification, description, author
 		(*C.gchar)(C.CString(description)),
 		(*C.gchar)(C.CString(author)),
 	)
+}
+
+// Type returns the GType of the element class.
+func (e *ElementClass) Type() glib.Type {
+	return glib.Type(C.go_gst_class_get_type(C.gpointer(e.Unsafe())))
 }
