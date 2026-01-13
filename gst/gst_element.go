@@ -36,13 +36,6 @@ gboolean elementParentSendEvent (GstElement * element, GstEvent * event)
 	return parent->send_event(element, event);
 }
 
-void elementLockState (GstElement * element) {
-	GST_STATE_LOCK(element);
-}
-
-void elementUnlockState (GstElement * element) {
-	GST_STATE_UNLOCK(element);
-}
 */
 import "C"
 
@@ -687,12 +680,4 @@ func (e *Element) ToGValue() (*glib.Value, error) {
 	}
 	val.SetInstance(unsafe.Pointer(e.Instance()))
 	return val, nil
-}
-
-func (e *Element) LockState() {
-	C.elementLockState(e.Instance())
-}
-
-func (e *Element) UnlockState() {
-	C.elementUnlockState(e.Instance())
 }
