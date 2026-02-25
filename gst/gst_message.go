@@ -53,6 +53,11 @@ func (m *Message) Ref() *Message {
 	return m
 }
 
+func (m *Message) Release() {
+	runtime.SetFinalizer(m, nil)
+	m.Unref()
+}
+
 // Copy will copy this object into a new Message.
 func (m *Message) Copy() *Message {
 	newNative := C.gst_message_copy(m.Instance())
