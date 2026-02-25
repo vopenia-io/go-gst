@@ -1,6 +1,12 @@
 package gst
 
-// #include "gst.go.h"
+/*
+#include "gst.go.h"
+
+gboolean is_ghost_pad(GstPad *pad) {
+	return GST_IS_GHOST_PAD(pad);
+}
+*/
 import "C"
 import (
 	"runtime"
@@ -20,7 +26,20 @@ func FromGstGhostPadUnsafeNone(pad unsafe.Pointer) *GhostPad {
 // FromGstGhostPadUnsafeFull wraps the given GstGhostPad.
 func FromGstGhostPadUnsafeFull(pad unsafe.Pointer) *GhostPad {
 	return &GhostPad{&ProxyPad{&Pad{wrapObject(glib.TransferFull(pad))}}}
+}
 
+// IsGhostPad checks if the underlying GstPad is a GstGhostPad.
+func (p *Pad) IsGhostPad() bool {
+	return gobool(C.is_ghost_pad(p.Instance()))
+}
+
+// AsGhostPad casts the Pad to a GhostPad if it is one, otherwise returns nil.
+// This increments the reference count of the object (via FromGstGhostPadUnsafeNone).
+func (p *Pad) AsGhostPad() *GhostPad {
+	if p.IsGhostPad() {
+		return FromGstGhostPadUnsafeNone(p.Unsafe())
+	}
+	return nil
 }
 
 // NewGhostPad create a new ghostpad with target as the target. The direction will be
