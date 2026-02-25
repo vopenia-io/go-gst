@@ -19,6 +19,10 @@ type GstBaseSrc struct{ *gst.Element }
 // or glib.Object interfaces.
 func ToGstBaseSrc(obj interface{}) *GstBaseSrc {
 	switch obj := obj.(type) {
+	case *GstBaseSrc:
+		return obj
+	case *gst.Element:
+		return &GstBaseSrc{obj}
 	case *gst.Object:
 		return &GstBaseSrc{&gst.Element{Object: obj}}
 	case *glib.Object:

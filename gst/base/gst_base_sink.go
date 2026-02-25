@@ -26,6 +26,10 @@ type GstBaseSink struct{ *gst.Element }
 // or glib.Object interfaces.
 func ToGstBaseSink(obj interface{}) *GstBaseSink {
 	switch obj := obj.(type) {
+	case *GstBaseSink:
+		return obj
+	case *gst.Element:
+		return &GstBaseSink{obj}
 	case *gst.Object:
 		return &GstBaseSink{&gst.Element{Object: obj}}
 	case *glib.Object:
