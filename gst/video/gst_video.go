@@ -86,3 +86,11 @@ func GuessFramerate(dur gst.ClockTime) (destNum, destDenom int, ok bool) {
 	gok := C.gst_video_guess_framerate(C.GstClockTime(dur), &num, &denom)
 	return int(num), int(denom), gobool(gok)
 }
+
+func NewEventUpstreamForceKeyUnit(runningTime gst.ClockTime, allHeaders bool, count uint) *gst.Event {
+	b := 0
+	if allHeaders {
+		b = 1
+	}
+	return gst.ToGstEvent(unsafe.Pointer(C.gst_video_event_new_upstream_force_key_unit(C.GstClockTime(runningTime), C.gboolean(b), C.guint(count))))
+}
