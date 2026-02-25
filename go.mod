@@ -1,10 +1,14 @@
 module github.com/go-gst/go-gst
 
-go 1.23.2
+go 1.24.0
+
+toolchain go1.24.4
 
 require (
-	github.com/go-gst/go-glib v1.4.1-0.20241209142714-f53cebf18559
+	github.com/go-gst/go-glib v0.0.0-00010101000000-000000000000
 	github.com/go-gst/go-pointer v0.0.0-20241127163939-ba766f075b4c
 )
 
-require golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
+require golang.org/x/exp v0.0.0-20251009144603-d2f985daa21b // indirect
+
+replace github.com/go-gst/go-glib => github.com/vopenia-io/go-glib v0.0.0-20260225140936-fb368d837537

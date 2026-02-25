@@ -126,12 +126,16 @@ extern GstTagList *     makeTagListWritable   (GstTagList * tagList);
 extern gboolean        gstObjectFlagIsSet      (GstObject * obj, guint32 flags);
 extern void            gstObjectFlagSet        (GstObject * obj, guint32 flags);
 extern void            gstObjectFlagUnset      (GstObject * obj, guint32 flags);
+extern void            gstObjectLock           (GstObject * obj);
+extern void            gstObjectUnlock         (GstObject * obj);
 
 /* Element utilities */
 
 extern gboolean        gstElementIsURIHandler  (GstElement * elem);
 extern GstTocSetter *  toTocSetter             (GstElement * elem);
 extern GstTagSetter *  toTagSetter             (GstElement *elem);
+extern void            gstElementStateLock     (GstElement * elem);
+extern void            gstElementStateUnlock   (GstElement * elem);
 
 
 /* Misc */

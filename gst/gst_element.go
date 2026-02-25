@@ -305,6 +305,11 @@ func (e *Element) GetClock() *Clock {
 	return FromGstClockUnsafeFull(unsafe.Pointer(cClock))
 }
 
+// SetClock sets the clock for this element. This is usually only needed for top-level elements like Pipeline. Setting the clock on sub-elements of a pipeline will not have any effect, as they will automatically use the clock of the pipeline when they are linked to it.
+func (e *Element) SetClock(clock *Clock) {
+	C.gst_element_set_clock((*C.GstElement)(e.Instance()), clock.Instance())
+}
+
 // GetFactory returns the factory that created this element. No refcounting is needed.
 func (e *Element) GetFactory() *ElementFactory {
 	factory := C.gst_element_get_factory((*C.GstElement)(e.Instance()))
@@ -680,4 +685,26 @@ func (e *Element) ToGValue() (*glib.Value, error) {
 	}
 	val.SetInstance(unsafe.Pointer(e.Instance()))
 	return val, nil
+}
+
+func SubclassFromElement[T glib.GoObjectSubclass](elem *Element) (T, bool) {
+	var zero T
+
+	cPtr := elem.Unsafe()
+	obj := glib.FromObjectUnsafePrivate(cPtr)
+	subclass, ok := obj.(T)
+	if !ok {
+		return zero, false
+	}
+	return subclass, true
+}
+
+// StateLock locks the state of the element.
+func (e *Element) StateLock() {
+	C.gstElementStateLock(e.Instance())
+}
+
+// StateUnlock unlocks the state of the element.
+func (e *Element) StateUnlock() {
+	C.gstElementStateUnlock(e.Instance())
 }

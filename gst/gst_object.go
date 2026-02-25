@@ -119,9 +119,15 @@ func (o *Object) RemoveControlBinding(binding *ControlBinding) {
 	C.gst_object_remove_control_binding(o.Instance(), binding.Instance())
 }
 
-// TODO: Consider wrapping GstObject GST_OBJECT_LOCK/GST_OBJECT_UNLOCK functionality
-// due to following flags related functionality is based on a regular uint32 field
-// and is not considered thread safe
+// Lock locks the object.
+func (o *Object) Lock() {
+	C.gstObjectLock(o.Instance())
+}
+
+// Unlock unlocks the object.
+func (o *Object) Unlock() {
+	C.gstObjectUnlock(o.Instance())
+}
 
 // Has returns true if this GstObject has the given flags.
 func (o *Object) hasFlags(flags uint32) bool {

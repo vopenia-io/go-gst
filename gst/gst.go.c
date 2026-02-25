@@ -152,12 +152,16 @@ GstTagList *     makeTagListWritable   (GstTagList * tagList)   { return gst_tag
 gboolean        gstObjectFlagIsSet      (GstObject * obj, guint32 flags) { return (GST_OBJECT_FLAG_IS_SET(obj, flags)); }
 void            gstObjectFlagSet        (GstObject * obj, guint32 flags) { (GST_OBJECT_FLAG_SET(obj, flags)); }
 void            gstObjectFlagUnset      (GstObject * obj, guint32 flags) { (GST_OBJECT_FLAG_UNSET(obj, flags)); }
+void            gstObjectLock           (GstObject * obj) { GST_OBJECT_LOCK(obj); }
+void            gstObjectUnlock         (GstObject * obj) { GST_OBJECT_UNLOCK(obj); }
 
 /* Element utilities */
 
 gboolean        gstElementIsURIHandler  (GstElement * elem) { return (GST_IS_URI_HANDLER(elem)); }
 GstTocSetter *  toTocSetter             (GstElement * elem) { return GST_TOC_SETTER(elem); }
 GstTagSetter *  toTagSetter             (GstElement *elem)  { return GST_TAG_SETTER(elem); }
+void            gstElementStateLock     (GstElement * elem) { GST_STATE_LOCK(elem); }
+void            gstElementStateUnlock   (GstElement * elem) { GST_STATE_UNLOCK(elem); }
 
 /* Sample Utilities */
 
