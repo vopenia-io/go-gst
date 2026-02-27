@@ -72,6 +72,9 @@ func FromGstElementUnsafeFull(elem unsafe.Pointer) *Element {
 // ToElement returns an Element object for the given Object. It will work
 // on either gst.Object or glib.Object interfaces.
 func ToElement(obj interface{}) *Element {
+	if obj == nil {
+		return nil
+	}
 	switch obj := obj.(type) {
 	case *Object:
 		return &Element{Object: obj}

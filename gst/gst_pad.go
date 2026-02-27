@@ -125,6 +125,21 @@ func FromGstPadUnsafeNone(pad unsafe.Pointer) *Pad {
 	return &Pad{wrapObject(glib.TransferNone(pad))}
 }
 
+func ToPad(obj interface{}) *Pad {
+	if obj == nil {
+		return nil
+	}
+	switch obj := obj.(type) {
+	case *Pad:
+		return obj
+	case *Object:
+		return &Pad{Object: obj}
+	case *glib.Object:
+		return &Pad{Object: &Object{InitiallyUnowned: &glib.InitiallyUnowned{Object: obj}}}
+	}
+	return nil
+}
+
 // NewPad returns a new pad with the given direction. If name is empty, one will be generated for you.
 func NewPad(name string, direction PadDirection) *Pad {
 	var cName *C.gchar
