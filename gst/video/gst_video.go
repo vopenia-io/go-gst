@@ -94,3 +94,11 @@ func NewEventUpstreamForceKeyUnit(runningTime gst.ClockTime, allHeaders bool, co
 	}
 	return gst.ToGstEvent(unsafe.Pointer(C.gst_video_event_new_upstream_force_key_unit(C.GstClockTime(runningTime), C.gboolean(b), C.guint(count))))
 }
+
+func NewEventDownstreamForceKeyUnit(timestamp, streamTime, runningTime gst.ClockTime, allHeaders bool, count uint) *gst.Event {
+	b := 0
+	if allHeaders {
+		b = 1
+	}
+	return gst.ToGstEvent(unsafe.Pointer(C.gst_video_event_new_downstream_force_key_unit(C.GstClockTime(timestamp), C.GstClockTime(streamTime), C.GstClockTime(runningTime), C.gboolean(b), C.guint(count))))
+}
