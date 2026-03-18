@@ -112,6 +112,9 @@ func (p PadFuncMap) RemoveFuncForPad(pad unsafe.Pointer) {
 	}
 }
 
+// TypePad is the GType for GstPad.
+var TypePad = glib.Type(C.gst_pad_get_type())
+
 // Pad is a go representation of a GstPad
 type Pad struct{ *Object }
 
