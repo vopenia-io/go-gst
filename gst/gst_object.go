@@ -42,7 +42,7 @@ func (o *Object) GetName() string {
 
 // GetParent retrieves the parent of this object.
 func (o *Object) GetParent() *Object {
-	return wrapObject(glib.Take(unsafe.Pointer(C.gst_object_get_parent(o.Instance()))))
+	return wrapObject(glib.TransferFull(unsafe.Pointer(C.gst_object_get_parent(o.Instance()))))
 }
 
 // GetValue retrieves the value for the given controlled property at the given timestamp.
