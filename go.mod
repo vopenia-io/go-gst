@@ -11,4 +11,4 @@ require (
 
 require golang.org/x/exp v0.0.0-20251009144603-d2f985daa21b // indirect
 
-replace github.com/go-gst/go-glib => github.com/vopenia-io/go-glib v0.0.0-20260319142128-91a3f58edff6
+replace github.com/go-gst/go-glib => github.com/vopenia-io/go-glib v0.0.0-20260323091857-632313c792eb
