@@ -40,6 +40,9 @@ type MapInfo struct {
 
 // Instance returns the underlying GstMapInfo instance.
 func (m *MapInfo) Instance() *C.GstMapInfo {
+	if m == nil {
+		return nil
+	}
 	return m.ptr
 }
 

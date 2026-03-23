@@ -23,7 +23,12 @@ func FromGstDeviceProviderUnsafeFull(deviceProvider unsafe.Pointer) *DeviceProvi
 }
 
 // Instance returns the underlying GstDevice object.
-func (d *DeviceProvider) Instance() *C.GstDeviceProvider { return C.toGstDeviceProvider(d.Unsafe()) }
+func (d *DeviceProvider) Instance() *C.GstDeviceProvider {
+	if d == nil {
+		return nil
+	}
+	return C.toGstDeviceProvider(d.Unsafe())
+}
 
 func (d *DeviceProvider) GetDevices() []*Device {
 	glist := C.gst_device_provider_get_devices((*C.GstDeviceProvider)(d.Instance()))

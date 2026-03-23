@@ -120,25 +120,22 @@ type Pad struct{ *Object }
 
 // FromGstPadUnsafeFull wraps the given pad in a reference and finalizer.
 func FromGstPadUnsafeFull(pad unsafe.Pointer) *Pad {
-	return &Pad{wrapObject(glib.TransferFull(pad))}
+	return wrapPad(glib.TransferFull(pad))
 }
 
 // FromGstPadUnsafeNone wraps the given pad in a finalizer.
 func FromGstPadUnsafeNone(pad unsafe.Pointer) *Pad {
-	return &Pad{wrapObject(glib.TransferNone(pad))}
+	return wrapPad(glib.TransferNone(pad))
 }
 
 func ToPad(obj interface{}) *Pad {
-	if obj == nil {
-		return nil
-	}
 	switch obj := obj.(type) {
 	case *Pad:
 		return obj
 	case *Object:
 		return &Pad{Object: obj}
 	case *glib.Object:
-		return &Pad{Object: &Object{InitiallyUnowned: &glib.InitiallyUnowned{Object: obj}}}
+		return wrapPad(obj)
 	}
 	return nil
 }
@@ -175,7 +172,12 @@ func NewPadFromTemplate(tmpl *PadTemplate, name string) *Pad {
 }
 
 // Instance returns the underlying C GstPad.
-func (p *Pad) Instance() *C.GstPad { return C.toGstPad(p.Unsafe()) }
+func (p *Pad) Instance() *C.GstPad {
+	if p == nil {
+		return nil
+	}
+	return C.toGstPad(p.Unsafe())
+}
 
 // Direction returns the direction of this pad.
 func (p *Pad) Direction() PadDirection {

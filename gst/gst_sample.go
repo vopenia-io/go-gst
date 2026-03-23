@@ -31,7 +31,12 @@ func FromGstSampleUnsafeFull(sample unsafe.Pointer) *Sample {
 }
 
 // Instance returns the underlying *GstSample instance.
-func (s *Sample) Instance() *C.GstSample { return C.toGstSample(unsafe.Pointer(s.sample)) }
+func (s *Sample) Instance() *C.GstSample {
+	if s == nil {
+		return nil
+	}
+	return C.toGstSample(unsafe.Pointer(s.sample))
+}
 
 // Ref increases the ref count on the sample.
 func (s *Sample) Ref() *Sample {

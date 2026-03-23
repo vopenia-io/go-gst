@@ -28,6 +28,9 @@ type gstTOCSetter struct {
 }
 
 func (g *gstTOCSetter) Instance() *C.GstTocSetter {
+	if g == nil {
+		return nil
+	}
 	return C.toTocSetter(g.ptr)
 }
 

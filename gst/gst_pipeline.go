@@ -20,12 +20,12 @@ type Pipeline struct {
 
 // FromGstPipelineUnsafeFull wraps the given pipeline pointer.
 func FromGstPipelineUnsafeFull(pipeline unsafe.Pointer) *Pipeline {
-	return &Pipeline{Bin: &Bin{&Element{wrapObject(glib.TransferFull(pipeline))}}}
+	return wrapPipeline(glib.TransferFull(pipeline))
 }
 
 // FromGstPipelineUnsafeNone wraps the given pipeline pointer.
 func FromGstPipelineUnsafeNone(pipeline unsafe.Pointer) *Pipeline {
-	return &Pipeline{Bin: &Bin{&Element{wrapObject(glib.TransferNone(pipeline))}}}
+	return wrapPipeline(glib.TransferNone(pipeline))
 }
 
 // NewPipeline allocates and returns a new empty pipeline. If name is empty, one
@@ -61,7 +61,12 @@ func NewPipelineFromString(launchv string) (*Pipeline, error) {
 }
 
 // Instance returns the native GstPipeline instance.
-func (p *Pipeline) Instance() *C.GstPipeline { return C.toGstPipeline(p.Unsafe()) }
+func (p *Pipeline) Instance() *C.GstPipeline {
+	if p == nil {
+		return nil
+	}
+	return C.toGstPipeline(p.Unsafe())
+}
 
 // GetPipelineBus returns the message bus for this pipeline.
 func (p *Pipeline) GetPipelineBus() *Bus {

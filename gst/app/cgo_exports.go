@@ -31,27 +31,11 @@ func getSrcCbsFromPtr(userData C.gpointer) *SourceCallbacks {
 }
 
 func wrapCSink(sink *C.GstAppSink) *Sink {
-	return wrapAppSink(&gst.Element{
-		Object: &gst.Object{
-			InitiallyUnowned: &glib.InitiallyUnowned{
-				Object: &glib.Object{
-					GObject: glib.ToGObject(unsafe.Pointer(sink)),
-				},
-			},
-		},
-	})
+	return wrapAppSink(gst.ToElement(&glib.Object{GObject: glib.ToGObject(unsafe.Pointer(sink))}))
 }
 
 func wrapCSource(src *C.GstAppSrc) *Source {
-	return wrapAppSrc(&gst.Element{
-		Object: &gst.Object{
-			InitiallyUnowned: &glib.InitiallyUnowned{
-				Object: &glib.Object{
-					GObject: glib.ToGObject(unsafe.Pointer(src)),
-				},
-			},
-		},
-	})
+	return wrapAppSrc(gst.ToElement(&glib.Object{GObject: glib.ToGObject(unsafe.Pointer(src))}))
 }
 
 //export goNeedDataCb

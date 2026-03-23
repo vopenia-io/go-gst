@@ -33,13 +33,16 @@ func ToGstBaseSink(obj interface{}) *GstBaseSink {
 	case *gst.Object:
 		return &GstBaseSink{&gst.Element{Object: obj}}
 	case *glib.Object:
-		return &GstBaseSink{&gst.Element{Object: &gst.Object{InitiallyUnowned: &glib.InitiallyUnowned{Object: obj}}}}
+		return &GstBaseSink{gst.ToElement(obj)}
 	}
 	return nil
 }
 
 // Instance returns the underlying C GstBaseSrc instance
 func (g *GstBaseSink) Instance() *C.GstBaseSink {
+	if g == nil {
+		return nil
+	}
 	return C.toGstBaseSink(g.Unsafe())
 }
 

@@ -24,6 +24,9 @@ func ToElementClass(klass *glib.ObjectClass) *ElementClass {
 
 // Instance returns the underlying GstElementClass instance.
 func (e *ElementClass) Instance() *C.GstElementClass {
+	if e == nil {
+		return nil
+	}
 	return C.toGstElementClass(e.Unsafe())
 }
 

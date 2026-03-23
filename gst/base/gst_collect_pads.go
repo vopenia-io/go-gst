@@ -112,7 +112,12 @@ type CollectData struct{ ptr *C.GstCollectData }
 func wrapCollectData(ptr *C.GstCollectData) *CollectData { return &CollectData{ptr} }
 
 // Instance returns the underly C object
-func (c *CollectData) Instance() *C.GstCollectData { return c.ptr }
+func (c *CollectData) Instance() *C.GstCollectData {
+	if c == nil {
+		return nil
+	}
+	return c.ptr
+}
 
 // Collect returns the owner CollectPads
 func (c *CollectData) Collect() *CollectPads { return wrapCollectPadsNone(c.ptr.collect) }
@@ -180,7 +185,12 @@ func wrapCollectPadsNone(ptr *C.GstCollectPads) *CollectPads {
 }
 
 // Instance returns the underlying C object.
-func (c *CollectPads) Instance() *C.GstCollectPads { return C.toGstCollectPads(c.Unsafe()) }
+func (c *CollectPads) Instance() *C.GstCollectPads {
+	if c == nil {
+		return nil
+	}
+	return C.toGstCollectPads(c.Unsafe())
+}
 
 // AddPad adds a pad to the collection of collect pads. The pad has to be a sinkpad. The refcount of the pad is
 // incremented. Use RemovePad to remove the pad from the collection again.

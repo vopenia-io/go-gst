@@ -21,7 +21,12 @@ func FromGstObjectUnsafeNone(ptr unsafe.Pointer) *Object { return wrapObject(gli
 func FromGstObjectUnsafeFull(ptr unsafe.Pointer) *Object { return wrapObject(glib.TransferFull(ptr)) }
 
 // Instance returns the native C GstObject.
-func (o *Object) Instance() *C.GstObject { return C.toGstObject(o.Unsafe()) }
+func (o *Object) Instance() *C.GstObject {
+	if o == nil {
+		return nil
+	}
+	return C.toGstObject(o.Unsafe())
+}
 
 // BaseObject is a convenience method for retrieving this object from embedded structs.
 func (o *Object) BaseObject() *Object { return o }

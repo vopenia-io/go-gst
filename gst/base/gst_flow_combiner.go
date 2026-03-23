@@ -26,7 +26,12 @@ func NewFlowCombiner() *FlowCombiner {
 }
 
 // Instance returns the underlying GstFlowCombiner instance.
-func (f *FlowCombiner) Instance() *C.GstFlowCombiner { return f.ptr }
+func (f *FlowCombiner) Instance() *C.GstFlowCombiner {
+	if f == nil {
+		return nil
+	}
+	return f.ptr
+}
 
 // AddPad adds a new pad to the FlowCombiner. A reference is taken on the pad.
 func (f *FlowCombiner) AddPad(pad *gst.Pad) {

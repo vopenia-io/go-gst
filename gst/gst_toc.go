@@ -39,7 +39,12 @@ func NewTOC(scope TOCScope) *TOC {
 }
 
 // Instance returns the underlying GstToc instance.
-func (t *TOC) Instance() *C.GstToc { return t.ptr }
+func (t *TOC) Instance() *C.GstToc {
+	if t == nil {
+		return nil
+	}
+	return t.ptr
+}
 
 // Ref increases the ref count on the TOC by one.
 func (t *TOC) Ref() *TOC {
@@ -159,7 +164,12 @@ func NewTOCEntry(entryType TOCEntryType, uid string) *TOCEntry {
 }
 
 // Instance returns the underlying GstTocEntry instance.
-func (t *TOCEntry) Instance() *C.GstTocEntry { return t.ptr }
+func (t *TOCEntry) Instance() *C.GstTocEntry {
+	if t == nil {
+		return nil
+	}
+	return t.ptr
+}
 
 // Ref increases the ref count on the TOCEntry by one.
 func (t *TOCEntry) Ref() *TOCEntry {

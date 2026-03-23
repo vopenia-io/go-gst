@@ -102,25 +102,32 @@ func NewBinFromString(description string, ghostUnlinkedPads bool) (*Bin, error) 
 		errMsg := C.GoString(gerr.message)
 		return nil, errors.New(errMsg)
 	}
-	return &Bin{&Element{wrapObject(glib.TransferNone(unsafe.Pointer(bin)))}}, nil
+	return wrapBin(glib.TransferNone(unsafe.Pointer(bin))), nil
 }
 
 // ToGstBin wraps the given glib.Object, gst.Object, or gst.Element in a Bin instance. Only
 // works for objects that implement their own Bin.
 func ToGstBin(obj interface{}) *Bin {
 	switch obj := obj.(type) {
-	case *Object:
-		return &Bin{&Element{Object: obj}}
+	case *Bin:
+		return obj
 	case *Element:
 		return &Bin{obj}
+	case *Object:
+		return &Bin{&Element{Object: obj}}
 	case *glib.Object:
-		return &Bin{&Element{Object: &Object{InitiallyUnowned: &glib.InitiallyUnowned{Object: obj}}}}
+		return wrapBin(obj)
 	}
 	return nil
 }
 
 // Instance returns the underlying GstBin instance.
-func (b *Bin) Instance() *C.GstBin { return C.toGstBin(b.Unsafe()) }
+func (b *Bin) Instance() *C.GstBin {
+	if b == nil {
+		return nil
+	}
+	return C.toGstBin(b.Unsafe())
+}
 
 // GetElementByName returns the element with the given name.
 func (b *Bin) GetElementByName(name string) (*Element, error) {

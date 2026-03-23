@@ -59,7 +59,12 @@ func SinkFromElement(elem *gst.Element) *Sink {
 }
 
 // Instance returns the native GstAppSink instance.
-func (a *Sink) Instance() *C.GstAppSink { return C.toGstAppSink(a.Unsafe()) }
+func (a *Sink) Instance() *C.GstAppSink {
+	if a == nil {
+		return nil
+	}
+	return C.toGstAppSink(a.Unsafe())
+}
 
 // GetBufferListSupport checks if appsink supports buffer lists.
 func (a *Sink) GetBufferListSupport() bool {

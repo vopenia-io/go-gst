@@ -14,12 +14,12 @@ type Stream struct{ *Object }
 
 // FromGstStreamUnsafeNone captures a pointer with a ref and finalizer.
 func FromGstStreamUnsafeNone(stream unsafe.Pointer) *Stream {
-	return &Stream{wrapObject(glib.TransferNone(stream))}
+	return wrapStream(glib.TransferNone(stream))
 }
 
 // FromGstStreamUnsafeFull captures a pointer with just a finalizer.
 func FromGstStreamUnsafeFull(stream unsafe.Pointer) *Stream {
-	return &Stream{wrapObject(glib.TransferNone(stream))}
+	return wrapStream(glib.TransferFull(stream))
 }
 
 // NewStream returns a new Stream with the given ID, caps, type, and flags.
@@ -32,6 +32,9 @@ func NewStream(id string, caps *Caps, sType StreamType, flags StreamFlags) *Stre
 
 // Instance returns the underlying GstStream.
 func (s *Stream) Instance() *C.GstStream {
+	if s == nil {
+		return nil
+	}
 	return C.toGstStream(s.Unsafe())
 }
 

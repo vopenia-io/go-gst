@@ -13,12 +13,12 @@ type PadTemplate struct{ *Object }
 
 // FromGstPadTemplateUnsafeNone wraps the given GstPadTemplate in a ref and a finalizer.
 func FromGstPadTemplateUnsafeNone(tmpl unsafe.Pointer) *PadTemplate {
-	return &PadTemplate{wrapObject(glib.TransferNone(tmpl))}
+	return wrapPadTemplate(glib.TransferNone(tmpl))
 }
 
 // FromGstPadTemplateUnsafeFull wraps the given GstPadTemplate in a finalizer.
 func FromGstPadTemplateUnsafeFull(tmpl unsafe.Pointer) *PadTemplate {
-	return &PadTemplate{wrapObject(glib.TransferFull(tmpl))}
+	return wrapPadTemplate(glib.TransferFull(tmpl))
 }
 
 // NewPadTemplate creates a new pad template with a name according to the given template and with the given arguments.
@@ -55,7 +55,12 @@ func NewPadTemplateWithGType(nameTemplate string, direction PadDirection, presen
 }
 
 // Instance returns the underlying C GstPadTemplate.
-func (p *PadTemplate) Instance() *C.GstPadTemplate { return C.toGstPadTemplate(p.Unsafe()) }
+func (p *PadTemplate) Instance() *C.GstPadTemplate {
+	if p == nil {
+		return nil
+	}
+	return C.toGstPadTemplate(p.Unsafe())
+}
 
 // Name returns the name of the pad template.
 func (p *PadTemplate) Name() string { return C.GoString(p.Instance().name_template) }

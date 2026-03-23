@@ -41,7 +41,12 @@ type gstTagSetter struct {
 }
 
 // Instance returns the underlying TagSetter instance.
-func (t *gstTagSetter) Instance() *C.GstTagSetter { return C.toTagSetter(t.ptr) }
+func (t *gstTagSetter) Instance() *C.GstTagSetter {
+	if t == nil {
+		return nil
+	}
+	return C.toTagSetter(t.ptr)
+}
 
 func (t *gstTagSetter) GetTagList() *TagList {
 	tagList := C.gst_tag_setter_get_tag_list(t.Instance())

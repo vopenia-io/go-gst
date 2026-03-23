@@ -60,6 +60,9 @@ type gstURIHandler struct {
 }
 
 func (g *gstURIHandler) Instance() *C.GstURIHandler {
+	if g == nil {
+		return nil
+	}
 	return C.toGstURIHandler(unsafe.Pointer(g.ptr))
 }
 

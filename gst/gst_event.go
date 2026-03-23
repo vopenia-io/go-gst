@@ -41,7 +41,12 @@ func ToGstEvent(ev unsafe.Pointer) *Event {
 }
 
 // Instance returns the underlying GstEvent instance.
-func (e *Event) Instance() *C.GstEvent { return C.toGstEvent(unsafe.Pointer(e.ptr)) }
+func (e *Event) Instance() *C.GstEvent {
+	if e == nil {
+		return nil
+	}
+	return C.toGstEvent(unsafe.Pointer(e.ptr))
+}
 
 // Type returns the type of the event
 func (e *Event) Type() EventType { return EventType(e.Instance()._type) }

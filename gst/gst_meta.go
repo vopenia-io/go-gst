@@ -40,7 +40,12 @@ type Meta struct {
 func FromGstMetaUnsafe(ptr unsafe.Pointer) *Meta { return wrapMeta(C.toGstMeta(ptr)) }
 
 // Instance returns the underlying GstMeta instance.
-func (m *Meta) Instance() *C.GstMeta { return C.toGstMeta(unsafe.Pointer(m.ptr)) }
+func (m *Meta) Instance() *C.GstMeta {
+	if m == nil {
+		return nil
+	}
+	return C.toGstMeta(unsafe.Pointer(m.ptr))
+}
 
 // Flags returns the flags on this Meta instance.
 func (m *Meta) Flags() MetaFlags { return MetaFlags(m.Instance().flags) }
@@ -154,7 +159,12 @@ func RegisterMeta(api glib.Type, name string, size int64, cbFuncs *MetaInfoCallb
 }
 
 // Instance returns the underlying GstMetaInfo instance.
-func (m *MetaInfo) Instance() *C.GstMetaInfo { return m.ptr }
+func (m *MetaInfo) Instance() *C.GstMetaInfo {
+	if m == nil {
+		return nil
+	}
+	return m.ptr
+}
 
 // API returns the tag identifying the metadata structure and api.
 func (m *MetaInfo) API() glib.Type { return glib.Type(m.Instance().api) }

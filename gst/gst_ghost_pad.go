@@ -20,12 +20,12 @@ type GhostPad struct{ *ProxyPad }
 
 // FromGstGhostPadUnsafeNone wraps the given GstGhostPad.
 func FromGstGhostPadUnsafeNone(pad unsafe.Pointer) *GhostPad {
-	return &GhostPad{&ProxyPad{&Pad{wrapObject(glib.TransferNone(pad))}}}
+	return wrapGhostPad(glib.TransferNone(pad))
 }
 
 // FromGstGhostPadUnsafeFull wraps the given GstGhostPad.
 func FromGstGhostPadUnsafeFull(pad unsafe.Pointer) *GhostPad {
-	return &GhostPad{&ProxyPad{&Pad{wrapObject(glib.TransferFull(pad))}}}
+	return wrapGhostPad(glib.TransferFull(pad))
 }
 
 // IsGhostPad checks if the underlying GstPad is a GstGhostPad.
@@ -128,7 +128,12 @@ func NewGhostPadNoTargetFromTemplate(name string, tmpl *PadTemplate) *GhostPad {
 }
 
 // Instance returns the underlying ghost pad instance.
-func (g *GhostPad) Instance() *C.GstGhostPad { return C.toGstGhostPad(g.Unsafe()) }
+func (g *GhostPad) Instance() *C.GstGhostPad {
+	if g == nil {
+		return nil
+	}
+	return C.toGstGhostPad(g.Unsafe())
+}
 
 // GetTarget gets the target pad of gpad.
 func (g *GhostPad) GetTarget() *Pad {
@@ -184,7 +189,12 @@ type ProxyPad struct{ *Pad }
 func (p *ProxyPad) toPad() *C.GstPad { return C.toGstPad(p.Unsafe()) }
 
 // Instance returns the underlying GstProxyPad instance.
-func (p *ProxyPad) Instance() *C.GstProxyPad { return C.toGstProxyPad(p.Unsafe()) }
+func (p *ProxyPad) Instance() *C.GstProxyPad {
+	if p == nil {
+		return nil
+	}
+	return C.toGstProxyPad(p.Unsafe())
+}
 
 // GetInternal gets the internal pad of pad.
 //

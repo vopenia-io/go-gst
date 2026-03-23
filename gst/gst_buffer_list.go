@@ -63,7 +63,12 @@ func ToGstBufferList(buf unsafe.Pointer) *BufferList {
 }
 
 // Instance returns the underlying GstBufferList.
-func (b *BufferList) Instance() *C.GstBufferList { return C.toGstBufferList(unsafe.Pointer(b.ptr)) }
+func (b *BufferList) Instance() *C.GstBufferList {
+	if b == nil {
+		return nil
+	}
+	return C.toGstBufferList(unsafe.Pointer(b.ptr))
+}
 
 // CalculateSize calculates the size of the data contained in this buffer list by adding the size of all buffers.
 func (b *BufferList) CalculateSize() int64 {

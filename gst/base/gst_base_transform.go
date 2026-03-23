@@ -55,16 +55,23 @@ type GstBaseTransform struct{ *gst.Element }
 // or glib.Object interfaces.
 func ToGstBaseTransform(obj interface{}) *GstBaseTransform {
 	switch obj := obj.(type) {
+	case *GstBaseTransform:
+		return obj
+	case *gst.Element:
+		return &GstBaseTransform{obj}
 	case *gst.Object:
 		return &GstBaseTransform{&gst.Element{Object: obj}}
 	case *glib.Object:
-		return &GstBaseTransform{&gst.Element{Object: &gst.Object{InitiallyUnowned: &glib.InitiallyUnowned{Object: obj}}}}
+		return &GstBaseTransform{gst.ToElement(obj)}
 	}
 	return nil
 }
 
 // Instance returns the underlying C GstBaseTransform instance
 func (g *GstBaseTransform) Instance() *C.GstBaseTransform {
+	if g == nil {
+		return nil
+	}
 	return C.toGstBaseTransform(g.Unsafe())
 }
 

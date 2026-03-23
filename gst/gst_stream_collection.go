@@ -34,6 +34,9 @@ func NewStreamCollection(upstreamID string) *StreamCollection {
 
 // Instance returns the underlying GstStreamCollection.
 func (s *StreamCollection) Instance() *C.GstStreamCollection {
+	if s == nil {
+		return nil
+	}
 	return C.toGstStreamCollection(s.Unsafe())
 }
 

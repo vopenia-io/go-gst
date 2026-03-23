@@ -30,7 +30,12 @@ func GetRegistry() *Registry {
 }
 
 // Instance returns the underlying GstRegistry instance.
-func (r *Registry) Instance() *C.GstRegistry { return C.toGstRegistry(r.Unsafe()) }
+func (r *Registry) Instance() *C.GstRegistry {
+	if r == nil {
+		return nil
+	}
+	return C.toGstRegistry(r.Unsafe())
+}
 
 // FindPlugin retrieves the plugin by the given name.
 func (r *Registry) FindPlugin(name string) (*Plugin, error) {

@@ -25,24 +25,22 @@ func NewBufferPool() *BufferPool {
 // FromGstBufferPoolUnsafeNone wraps the given unsafe.Pointer in a BufferPool instance. It takes a
 // ref and places a runtime finalizer on the resulting object.
 func FromGstBufferPoolUnsafeNone(bufferPool unsafe.Pointer) *BufferPool {
-	pool := wrapBufferPool(glib.TransferNone(bufferPool))
-	return pool
+	return wrapBufferPool(glib.TransferNone(bufferPool))
 }
-
-// // FromGstBufferPoolUnsafe is an alias to FromGstBufferPoolUnsafeNone.
-// func FromGstBufferPoolUnsafe(bufferPool unsafe.Pointer) *BufferPool {
-// 	return FromGstBufferPoolUnsafeNone(bufferPool)
-// }
 
 // FromGstBufferPoolUnsafeFull wraps the given unsafe.Pointer in a BufferPool instance. It just
 // places a runtime finalizer on the resulting object.
 func FromGstBufferPoolUnsafeFull(bufferPool unsafe.Pointer) *BufferPool {
-	pool := wrapBufferPool(glib.TransferFull(bufferPool))
-	return pool
+	return wrapBufferPool(glib.TransferFull(bufferPool))
 }
 
 // Instance returns the underlying GstBufferPool instance.
-func (b *BufferPool) Instance() *C.GstBufferPool { return C.toGstBufferPool(b.Unsafe()) }
+func (b *BufferPool) Instance() *C.GstBufferPool {
+	if b == nil {
+		return nil
+	}
+	return C.toGstBufferPool(b.Unsafe())
+}
 
 // IsFlushing returns true if this BufferPool is currently flushing.
 func (b *BufferPool) IsFlushing() bool { return gobool(C.bufferPoolIsFlushing(b.Instance())) }

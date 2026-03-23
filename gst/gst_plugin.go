@@ -116,12 +116,12 @@ type Plugin struct{ *Object }
 
 // FromGstPluginUnsafeNone wraps the given pointer in a Plugin.
 func FromGstPluginUnsafeNone(plugin unsafe.Pointer) *Plugin {
-	return &Plugin{wrapObject(glib.TransferNone(plugin))}
+	return wrapPlugin(glib.TransferNone(plugin))
 }
 
 // FromGstPluginUnsafeFull wraps the given pointer in a Plugin.
 func FromGstPluginUnsafeFull(plugin unsafe.Pointer) *Plugin {
-	return &Plugin{wrapObject(glib.TransferFull(plugin))}
+	return wrapPlugin(glib.TransferFull(plugin))
 }
 
 // RegisterPlugin will register a static plugin, i.e. a plugin which is private to an application
@@ -177,7 +177,12 @@ func LoadPluginFile(fpath string) (*Plugin, error) {
 }
 
 // Instance returns the underlying GstPlugin instance.
-func (p *Plugin) Instance() *C.GstPlugin { return C.toGstPlugin(p.Unsafe()) }
+func (p *Plugin) Instance() *C.GstPlugin {
+	if p == nil {
+		return nil
+	}
+	return C.toGstPlugin(p.Unsafe())
+}
 
 // Description returns the description for this plugin.
 func (p *Plugin) Description() string {

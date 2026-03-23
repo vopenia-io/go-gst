@@ -11,7 +11,12 @@ import (
 type PluginFeature struct{ *Object }
 
 // Instance returns the underlying GstPluginFeature instance
-func (p *PluginFeature) Instance() *C.GstPluginFeature { return C.toGstPluginFeature(p.Unsafe()) }
+func (p *PluginFeature) Instance() *C.GstPluginFeature {
+	if p == nil {
+		return nil
+	}
+	return C.toGstPluginFeature(p.Unsafe())
+}
 
 // GetPlugin returns the plugin that provides this feature or  nil.
 func (p *PluginFeature) GetPlugin() *Plugin {

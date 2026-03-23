@@ -26,13 +26,16 @@ func ToGstBaseSrc(obj interface{}) *GstBaseSrc {
 	case *gst.Object:
 		return &GstBaseSrc{&gst.Element{Object: obj}}
 	case *glib.Object:
-		return &GstBaseSrc{&gst.Element{Object: &gst.Object{InitiallyUnowned: &glib.InitiallyUnowned{Object: obj}}}}
+		return &GstBaseSrc{gst.ToElement(obj)}
 	}
 	return nil
 }
 
 // Instance returns the underlying C GstBaseSrc instance
 func (g *GstBaseSrc) Instance() *C.GstBaseSrc {
+	if g == nil {
+		return nil
+	}
 	return C.toGstBaseSrc(g.Unsafe())
 }
 

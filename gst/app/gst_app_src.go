@@ -64,7 +64,12 @@ func SrcFromElement(elem *gst.Element) *Source {
 }
 
 // Instance returns the native GstAppSink instance.
-func (a *Source) Instance() *C.GstAppSrc { return C.toGstAppSrc(a.Unsafe()) }
+func (a *Source) Instance() *C.GstAppSrc {
+	if a == nil {
+		return nil
+	}
+	return C.toGstAppSrc(a.Unsafe())
+}
 
 // EndStream signals to the app source that the stream has ended after the last queued
 // buffer.

@@ -96,6 +96,9 @@ func ToChildProxy(elem *Element) *ChildProxy {
 
 // Instance returns the underlying GstChildProxy instance.
 func (c *ChildProxy) Instance() *C.GstChildProxy {
+	if c == nil {
+		return nil
+	}
 	return C.toGstChildProxy(unsafe.Pointer(c.ptr))
 }
 

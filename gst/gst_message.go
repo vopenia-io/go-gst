@@ -40,7 +40,12 @@ func FromGstMessageUnsafeFull(msg unsafe.Pointer) *Message {
 func ToGstMessage(msg unsafe.Pointer) *Message { return wrapMessage((*C.GstMessage)(msg)) }
 
 // Instance returns the underlying GstMessage object.
-func (m *Message) Instance() *C.GstMessage { return C.toGstMessage(unsafe.Pointer(m.msg)) }
+func (m *Message) Instance() *C.GstMessage {
+	if m == nil {
+		return nil
+	}
+	return C.toGstMessage(unsafe.Pointer(m.msg))
+}
 
 // Unref will call `gst_message_unref` on the underlying GstMessage, freeing it from memory.
 func (m *Message) Unref() { C.gst_message_unref(m.Instance()) }

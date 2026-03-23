@@ -154,7 +154,12 @@ func NewURIQuery() *Query {
 }
 
 // Instance returns the underlying GstQuery instance.
-func (q *Query) Instance() *C.GstQuery { return C.toGstQuery(unsafe.Pointer(q.ptr)) }
+func (q *Query) Instance() *C.GstQuery {
+	if q == nil {
+		return nil
+	}
+	return C.toGstQuery(unsafe.Pointer(q.ptr))
+}
 
 // AddAllocationMeta adds api with params as one of the supported metadata API to query.
 func (q *Query) AddAllocationMeta(api glib.Type, structure *Structure) {

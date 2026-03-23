@@ -25,6 +25,9 @@ const (
 )
 
 func (cs *InterpolationControlSource) Instance() *C.GstControlSource {
+	if cs == nil {
+		return nil
+	}
 	return C.toGstControlSource(cs.Unsafe())
 }
 

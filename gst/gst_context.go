@@ -50,7 +50,12 @@ func NewContext(ctxType string, persistent bool) *Context {
 }
 
 // Instance returns the underlying GstContext instance.
-func (c *Context) Instance() *C.GstContext { return C.toGstContext(unsafe.Pointer(c.ptr)) }
+func (c *Context) Instance() *C.GstContext {
+	if c == nil {
+		return nil
+	}
+	return C.toGstContext(unsafe.Pointer(c.ptr))
+}
 
 // GetType returns the type of the context.
 //

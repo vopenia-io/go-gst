@@ -61,7 +61,12 @@ func NewMemoryWrapped(flags MemoryFlags, data []byte, maxSize, offset int64) *Me
 }
 
 // Instance returns the underlying GstMemory instance.
-func (m *Memory) Instance() *C.GstMemory { return C.toGstMemory(unsafe.Pointer(m.ptr)) }
+func (m *Memory) Instance() *C.GstMemory {
+	if m == nil {
+		return nil
+	}
+	return C.toGstMemory(unsafe.Pointer(m.ptr))
+}
 
 // Ref increases the ref count on this memory block by one.
 func (m *Memory) Ref() *Memory {

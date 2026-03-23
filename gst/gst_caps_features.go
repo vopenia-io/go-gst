@@ -64,6 +64,9 @@ func (c *CapsFeatures) ToGValue() (*glib.Value, error) {
 
 // Instance returns the native underlying GstCapsFeatures instance.
 func (c *CapsFeatures) Instance() *C.GstCapsFeatures {
+	if c == nil {
+		return nil
+	}
 	return C.toGstCapsFeatures(unsafe.Pointer(c.native))
 }
 

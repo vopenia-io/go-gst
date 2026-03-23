@@ -11,6 +11,9 @@ import (
 type ControlBinding struct{ *Object }
 
 func (cb *ControlBinding) Instance() *C.GstControlBinding {
+	if cb == nil {
+		return nil
+	}
 	return C.toGstControlBinding(cb.Unsafe())
 }
 

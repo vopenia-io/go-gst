@@ -67,7 +67,12 @@ func NewTagListFromString(tags string) *TagList {
 }
 
 // Instance returns the underlying GstTagList instance.
-func (t *TagList) Instance() *C.GstTagList { return C.toGstTagList(unsafe.Pointer(t.ptr)) }
+func (t *TagList) Instance() *C.GstTagList {
+	if t == nil {
+		return nil
+	}
+	return C.toGstTagList(unsafe.Pointer(t.ptr))
+}
 
 // String implements a stringer on the TagList and serializes it to a string.
 func (t *TagList) String() string {

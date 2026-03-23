@@ -41,11 +41,10 @@ type Buffer struct {
 // FromGstBufferUnsafeNone wraps the given buffer, sinking any floating references, and places
 // a finalizer on the wrapped Buffer.
 func FromGstBufferUnsafeNone(buf unsafe.Pointer) *Buffer {
-	if buf == nil {
+	wrapped := ToGstBuffer(buf)
+	if wrapped == nil {
 		return nil
 	}
-
-	wrapped := ToGstBuffer(buf)
 	wrapped.Ref()
 	runtime.SetFinalizer(wrapped, (*Buffer).Unref)
 	return wrapped
@@ -53,11 +52,10 @@ func FromGstBufferUnsafeNone(buf unsafe.Pointer) *Buffer {
 
 // FromGstBufferUnsafeFull wraps the given buffer without taking an additional reference.
 func FromGstBufferUnsafeFull(buf unsafe.Pointer) *Buffer {
-	if buf == nil {
+	wrapped := ToGstBuffer(buf)
+	if wrapped == nil {
 		return nil
 	}
-
-	wrapped := ToGstBuffer(buf)
 	runtime.SetFinalizer(wrapped, (*Buffer).Unref)
 	return wrapped
 }
@@ -153,7 +151,12 @@ func NewBufferFull(flags MemoryFlags, data []byte, maxSize, offset, size int64, 
 }
 
 // Instance returns the underlying GstBuffer instance.
-func (b *Buffer) Instance() *C.GstBuffer { return C.toGstBuffer(unsafe.Pointer(b.ptr)) }
+func (b *Buffer) Instance() *C.GstBuffer {
+	if b == nil {
+		return nil
+	}
+	return C.toGstBuffer(unsafe.Pointer(b.ptr))
+}
 
 // Ref increases the ref count on the buffer by one.
 func (b *Buffer) Ref() *Buffer { return wrapBuffer(C.gst_buffer_ref(b.Instance())) }

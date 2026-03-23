@@ -93,6 +93,9 @@ func NewDiscoverer(timeout gst.ClockTime) (*Discoverer, error) {
 
 // Instance returns the underlying GstDiscoverer instance.
 func (d *Discoverer) Instance() *C.GstDiscoverer {
+	if d == nil {
+		return nil
+	}
 	return (*C.GstDiscoverer)(unsafe.Pointer(d.GObject))
 }
 
@@ -117,6 +120,9 @@ func wrapDiscovererInfoFull(d *C.GstDiscovererInfo) *DiscovererInfo {
 
 // Instance returns the underlying GstDiscovererInfo instance.
 func (d *DiscovererInfo) Instance() *C.GstDiscovererInfo {
+	if d == nil {
+		return nil
+	}
 	return (*C.GstDiscovererInfo)(unsafe.Pointer(d.GObject))
 }
 
@@ -232,6 +238,9 @@ func wrapDiscovererStreamInfo(d *C.GstDiscovererStreamInfo) *DiscovererStreamInf
 
 // Instance returns the underlying GstDiscovererStreamInfo instance.
 func (d *DiscovererStreamInfo) Instance() *C.GstDiscovererStreamInfo {
+	if d == nil {
+		return nil
+	}
 	return (*C.GstDiscovererStreamInfo)(unsafe.Pointer(d.GObject))
 }
 
@@ -277,6 +286,9 @@ type DiscovererAudioInfo struct{ *DiscovererStreamInfo }
 
 // Instance returns the underlying GstDiscovererAudioInfo instance.
 func (d *DiscovererAudioInfo) Instance() *C.GstDiscovererAudioInfo {
+	if d == nil {
+		return nil
+	}
 	return (*C.GstDiscovererAudioInfo)(unsafe.Pointer(d.GObject))
 }
 
@@ -324,6 +336,9 @@ type DiscovererVideoInfo struct{ *DiscovererStreamInfo }
 
 // Instance returns the underlying GstDiscovererVideoInfo instance.
 func (d *DiscovererVideoInfo) Instance() *C.GstDiscovererVideoInfo {
+	if d == nil {
+		return nil
+	}
 	return (*C.GstDiscovererVideoInfo)(unsafe.Pointer(d.GObject))
 }
 
@@ -387,6 +402,9 @@ type DiscovererContainerInfo struct{ *DiscovererStreamInfo }
 
 // Instance returns the underlying GstDiscovererContainerInfo instance.
 func (d *DiscovererContainerInfo) Instance() *C.GstDiscovererContainerInfo {
+	if d == nil {
+		return nil
+	}
 	return (*C.GstDiscovererContainerInfo)(unsafe.Pointer(d.GObject))
 }
 
@@ -404,6 +422,9 @@ type DiscovererSubtitleInfo struct{ *DiscovererStreamInfo }
 
 // Instance returns the underlying GstDiscovererSubtitleInfo instance.
 func (d *DiscovererSubtitleInfo) Instance() *C.GstDiscovererSubtitleInfo {
+	if d == nil {
+		return nil
+	}
 	return (*C.GstDiscovererSubtitleInfo)(unsafe.Pointer(d.GObject))
 }
 

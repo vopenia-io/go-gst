@@ -25,6 +25,9 @@ func GetCropMetaInfo() *CropMetaInfo {
 
 // Instance returns the underlying C GstVideoCropMeta instance.
 func (c *CropMetaInfo) Instance() *C.GstVideoCropMeta {
+	if c == nil {
+		return nil
+	}
 	return c.ptr
 }
 

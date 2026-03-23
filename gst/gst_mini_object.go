@@ -38,7 +38,12 @@ func (m *MiniObject) unsafe() unsafe.Pointer { return m.ptr }
 func (m *MiniObject) Parent() *MiniObject { return m.parent }
 
 // Instance returns the native GstMiniObject instance.
-func (m *MiniObject) Instance() *C.GstMiniObject { return C.toGstMiniObject(m.unsafe()) }
+func (m *MiniObject) Instance() *C.GstMiniObject {
+	if m == nil {
+		return nil
+	}
+	return C.toGstMiniObject(m.unsafe())
+}
 
 // Ref increases the ref count on this object by one.
 func (m *MiniObject) Ref() { C.gst_mini_object_ref(m.Instance()) }

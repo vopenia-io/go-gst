@@ -73,6 +73,9 @@ type gstColorBalance struct{ elem *C.GstElement }
 
 // Instance returns the C GstColorBalance interface.
 func (c *gstColorBalance) Instance() *C.GstColorBalance {
+	if c == nil {
+		return nil
+	}
 	return C.toGstColorBalance(c.elem)
 }
 

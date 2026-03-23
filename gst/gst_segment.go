@@ -34,7 +34,12 @@ func NewFormattedSegment(f Format) *Segment {
 }
 
 // Instance returns the underlying GstSegment instance.
-func (s *Segment) Instance() *C.GstSegment { return s.ptr }
+func (s *Segment) Instance() *C.GstSegment {
+	if s == nil {
+		return nil
+	}
+	return s.ptr
+}
 
 // GetFlags returns the flags on this segment.
 func (s *Segment) GetFlags() SegmentFlags { return SegmentFlags(s.Instance().flags) }

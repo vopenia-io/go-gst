@@ -35,10 +35,10 @@ type Caps struct {
 // This is meant for internal usage and is exported for visibility to other packages.
 // A ref is taken on the caps and finalizer placed on the object.
 func FromGstCapsUnsafeNone(caps unsafe.Pointer) *Caps {
-	if caps == nil {
+	gocaps := ToGstCaps(caps)
+	if gocaps == nil {
 		return nil
 	}
-	gocaps := ToGstCaps(caps)
 	gocaps.Ref()
 	runtime.SetFinalizer(gocaps, (*Caps).Unref)
 	return gocaps
@@ -48,10 +48,10 @@ func FromGstCapsUnsafeNone(caps unsafe.Pointer) *Caps {
 // This is meant for internal usage and is exported for visibility to other packages.
 // A finalizer is placed on the object to Unref after leaving scope.
 func FromGstCapsUnsafeFull(caps unsafe.Pointer) *Caps {
-	if caps == nil {
+	gocaps := ToGstCaps(caps)
+	if gocaps == nil {
 		return nil
 	}
-	gocaps := ToGstCaps(caps)
 	runtime.SetFinalizer(gocaps, (*Caps).Unref)
 	return gocaps
 }
@@ -146,7 +146,12 @@ func (c *Caps) Ref() *Caps {
 func (c *Caps) Unref() { C.gst_caps_unref(c.Instance()) }
 
 // Instance returns the native GstCaps instance
-func (c *Caps) Instance() *C.GstCaps { return C.toGstCaps(c.Unsafe()) }
+func (c *Caps) Instance() *C.GstCaps {
+	if c == nil {
+		return nil
+	}
+	return C.toGstCaps(c.Unsafe())
+}
 
 // MakeWritable returns a writable copy of caps.
 func (c *Caps) MakeWritable() *Caps {

@@ -55,31 +55,24 @@ type Element struct{ *Object }
 
 // FromGstElementUnsafeNone wraps the given element with a ref and a finalizer.
 func FromGstElementUnsafeNone(elem unsafe.Pointer) *Element {
-	if elem == nil {
-		return nil
-	}
-	return &Element{Object: &Object{InitiallyUnowned: &glib.InitiallyUnowned{Object: glib.TransferNone(elem)}}}
+	return wrapElement(glib.TransferNone(elem))
 }
 
 // FromGstElementUnsafeFull wraps the given element with a finalizer.
 func FromGstElementUnsafeFull(elem unsafe.Pointer) *Element {
-	if elem == nil {
-		return nil
-	}
-	return &Element{Object: &Object{InitiallyUnowned: &glib.InitiallyUnowned{Object: glib.TransferFull(elem)}}}
+	return wrapElement(glib.TransferFull(elem))
 }
 
 // ToElement returns an Element object for the given Object. It will work
 // on either gst.Object or glib.Object interfaces.
 func ToElement(obj interface{}) *Element {
-	if obj == nil {
-		return nil
-	}
 	switch obj := obj.(type) {
+	case *Element:
+		return obj
 	case *Object:
 		return &Element{Object: obj}
 	case *glib.Object:
-		return &Element{Object: &Object{InitiallyUnowned: &glib.InitiallyUnowned{Object: obj}}}
+		return wrapElement(obj)
 	}
 	return nil
 }
@@ -131,7 +124,12 @@ func RegisterElement(plugin *Plugin, name string, rank Rank, elem glib.GoObjectS
 }
 
 // Instance returns the underlying GstElement instance.
-func (e *Element) Instance() *C.GstElement { return C.toGstElement(e.Unsafe()) }
+func (e *Element) Instance() *C.GstElement {
+	if e == nil {
+		return nil
+	}
+	return C.toGstElement(e.Unsafe())
+}
 
 // AbortState aborts the state change of the element. This function is used by elements that do asynchronous state changes
 // and find out something is wrong.

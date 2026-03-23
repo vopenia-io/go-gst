@@ -25,7 +25,12 @@ func FromGstDeviceUnsafeFull(device unsafe.Pointer) *Device {
 }
 
 // Instance returns the underlying GstDevice object.
-func (d *Device) Instance() *C.GstDevice { return C.toGstDevice(d.Unsafe()) }
+func (d *Device) Instance() *C.GstDevice {
+	if d == nil {
+		return nil
+	}
+	return C.toGstDevice(d.Unsafe())
+}
 
 // CreateElement creates a new element with all the required parameters set to use this device.
 // If name is empty, one is automatically generated.

@@ -32,7 +32,12 @@ func NewAllocationParams() *AllocationParams {
 }
 
 // Instance returns the underlying GstAllocationParams.
-func (a *AllocationParams) Instance() *C.GstAllocationParams { return a.ptr }
+func (a *AllocationParams) Instance() *C.GstAllocationParams {
+	if a == nil {
+		return nil
+	}
+	return a.ptr
+}
 
 // Init initializes these AllocationParams to their original values.
 func (a *AllocationParams) Init() { C.gst_allocation_params_init(a.ptr) }
@@ -88,7 +93,12 @@ func DefaultAllocator() *Allocator {
 }
 
 // Instance returns the underlying GstAllocator instance.
-func (a *Allocator) Instance() *C.GstAllocator { return C.toGstAllocator(a.Unsafe()) }
+func (a *Allocator) Instance() *C.GstAllocator {
+	if a == nil {
+		return nil
+	}
+	return C.toGstAllocator(a.Unsafe())
+}
 
 // MemType returns the memory type for this allocator.
 func (a *Allocator) MemType() string { return C.GoString(a.Instance().mem_type) }

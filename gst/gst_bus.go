@@ -82,7 +82,12 @@ func FromGstBusUnsafeNone(bus unsafe.Pointer) *Bus { return wrapBus(glib.Transfe
 func FromGstBusUnsafeFull(bus unsafe.Pointer) *Bus { return wrapBus(glib.TransferFull(bus)) }
 
 // Instance returns the underlying GstBus instance.
-func (b *Bus) Instance() *C.GstBus { return C.toGstBus(b.Unsafe()) }
+func (b *Bus) Instance() *C.GstBus {
+	if b == nil {
+		return nil
+	}
+	return C.toGstBus(b.Unsafe())
+}
 
 // AddSignalWatch adds a bus signal watch to the default main context with the default priority (%G_PRIORITY_DEFAULT).
 // It is also possible to use a non-default main context set up using g_main_context_push_thread_default (before one
