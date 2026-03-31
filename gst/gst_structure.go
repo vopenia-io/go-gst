@@ -109,6 +109,11 @@ func (s *Structure) Instance() *C.GstStructure {
 	return C.toGstStructure(s.ptr)
 }
 
+// Unsafe returns the underlying unsafe.Pointer for this structure.
+func (s *Structure) Unsafe() unsafe.Pointer {
+	return s.ptr
+}
+
 // Free frees the memory for the underlying GstStructure.
 func (s *Structure) Free() { C.gst_structure_free(s.Instance()) }
 
@@ -122,6 +127,13 @@ func (s *Structure) String() string {
 // Name returns the name of this structure.
 func (s *Structure) Name() string {
 	return C.GoString(C.gst_structure_get_name(s.Instance()))
+}
+
+// SetName sets the name of this structure.
+func (s *Structure) SetName(name string) {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	C.gst_structure_set_name(s.Instance(), cName)
 }
 
 // Size returns the number of fields inside this structure.
