@@ -59,6 +59,9 @@ func FromGstCapsUnsafeFull(caps unsafe.Pointer) *Caps {
 // ToGstCaps converts the given pointer into a Caps without affecting the ref count or
 // placing finalizers.
 func ToGstCaps(caps unsafe.Pointer) *Caps {
+	if caps == nil {
+		return nil
+	}
 	return wrapCaps(C.toGstCaps(caps))
 }
 
