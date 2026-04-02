@@ -147,6 +147,12 @@ func (m *Media) AttributesLen() int {
 	return int(C.gst_sdp_media_attributes_len(m.ptr))
 }
 
+func (m *Media) HasAttribute(key string) bool {
+	ckey := C.CString(key)
+	defer C.free(unsafe.Pointer(ckey))
+	return C.gst_sdp_media_get_attribute_val(m.ptr, ckey) != nil
+}
+
 // GetAttribute returns the attribute at index idx.
 func (m *Media) GetAttribute(idx int) *Attribute {
 	attr := C.gst_sdp_media_get_attribute(m.ptr, C.guint(idx))
