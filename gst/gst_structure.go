@@ -224,13 +224,27 @@ func (s *Structure) ToGValue() (*glib.Value, error) {
 	return val, nil
 }
 
+func (s *Structure) Transfer() *Structure {
+	if s == nil {
+		return nil
+	}
+	runtime.SetFinalizer(s, nil)
+	return s
+}
+
 // marshalStructure is used to extract the GstStructure from a GValue.
 func marshalStructure(p unsafe.Pointer) (interface{}, error) {
+	if p == nil {
+		return nil, nil
+	}
 	c := C.gst_value_get_structure(toGValue(p))
 	return structureFromGlibNone(c), nil
 }
 
 func wrapStructure(st *C.GstStructure) *Structure {
+	if st == nil {
+		return nil
+	}
 	return &Structure{
 		ptr:   unsafe.Pointer(st),
 		gType: glib.Type(st._type),
@@ -240,8 +254,10 @@ func wrapStructure(st *C.GstStructure) *Structure {
 // structureFromGlibNone wraps a *C.GstStructure in a Structure after copying it.
 // this is needed when the structure is returned from a function that does not transfer ownership.
 func structureFromGlibNone(st *C.GstStructure) *Structure {
+	if st == nil {
+		return nil
+	}
 	copy := C.gst_structure_copy(st)
-
 	return structureFromGlibFull(copy)
 }
 
@@ -249,10 +265,11 @@ func structureFromGlibNone(st *C.GstStructure) *Structure {
 // is returned by a function that transfers ownership to the caller.
 func structureFromGlibFull(st *C.GstStructure) *Structure {
 	s := wrapStructure(st)
-
-	runtime.SetFinalizer(s, func(s *Structure) {
-		s.Free()
-	})
+	if s != nil {
+		runtime.SetFinalizer(s, func(s *Structure) {
+			s.Free()
+		})
+	}
 
 	return s
 }
