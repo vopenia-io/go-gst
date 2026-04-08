@@ -151,3 +151,16 @@ func (e *ElementFactory) GetMetadataKeys() []string {
 	size := C.sizeOfGCharArray(keys)
 	return goStrings(size, keys)
 }
+
+func (e *ElementFactory) GetStaticPadTemplates() []*StaticPadTemplate {
+	glist := glib.WrapList(unsafe.Pointer(C.gst_element_factory_get_static_pad_templates((*C.GstElementFactory)(e.Instance()))))
+	if glist == nil {
+		return nil
+	}
+	var templates []*StaticPadTemplate
+	glist.Foreach(func(item interface{}) {
+		pt := item.(unsafe.Pointer)
+		templates = append(templates, FromGstStaticPadTemplateUnsafe(pt))
+	})
+	return templates
+}
