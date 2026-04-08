@@ -1,6 +1,6 @@
 github.com/go-gst/go-pointer v0.0.0-20241127163939-ba766f075b4c h1:x8kKRVDmz5BRlolmDZGcsuZ1l+js6TRL3QWBJjGVctM=
 github.com/go-gst/go-pointer v0.0.0-20241127163939-ba766f075b4c/go.mod h1:qKw5ZZ0U58W6PU/7F/Lopv+14nKYmdXlOd7VnAZ17Mk=
-github.com/vopenia-io/go-glib v0.0.0-20260331095234-b9e9d7b98559 h1:AEA0zszOyMM5ws9o366PfH2CEKolq2lDbcbOa7Of5Qg=
-github.com/vopenia-io/go-glib v0.0.0-20260331095234-b9e9d7b98559/go.mod h1:dqdh3eCmMS9ofMtyPGoO5jeTzaoGLS+nGMdnoL33is8=
+github.com/vopenia-io/go-glib v0.0.0-20260408150508-cf7ab5c45961 h1:bY+qMIkVKvjOESWjCQMY7c1yqRdDHizKvmQMQqWgndg=
+github.com/vopenia-io/go-glib v0.0.0-20260408150508-cf7ab5c45961/go.mod h1:dqdh3eCmMS9ofMtyPGoO5jeTzaoGLS+nGMdnoL33is8=
 golang.org/x/exp v0.0.0-20251009144603-d2f985daa21b h1:18qgiDvlvH7kk8Ioa8Ov+K6xCi0GMvmGfGW0sgd/SYA=
 golang.org/x/exp v0.0.0-20251009144603-d2f985daa21b/go.mod h1:j/pmGrbnkbPtQfxEe5D0VQhZC6qKbfKifgD0oM7sR70=
