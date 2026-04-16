@@ -207,6 +207,10 @@ func (s *Structure) copy() *C.GstStructure {
 	return C.gst_structure_copy(s.Instance())
 }
 
+func (s *Structure) Copy() *Structure {
+	return structureFromGlibFull(s.copy())
+}
+
 // ToGValue implements a glib.ValueTransformer
 func (s *Structure) ToGValue() (*glib.Value, error) {
 	val, err := glib.ValueInit(TypeStructure)
