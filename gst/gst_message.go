@@ -141,6 +141,7 @@ func (m *Message) parseToError() *GError {
 		errMsg:    C.GoString(gerr.message),
 		structure: m.GetStructure(),
 		debugStr:  strings.TrimSpace(C.GoString((*C.gchar)(debugInfo))),
+		code:      ErrorCode(gerr.code),
 	}
 }
 
