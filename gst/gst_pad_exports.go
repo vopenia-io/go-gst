@@ -27,7 +27,7 @@ func goGstPadFuncDestroyNotify(notifyInfo *C.PadDestroyNotifyInfo) {
 	defer gopointer.Unref(funcMapPtr)
 
 	pad := gopointer.Restore(padPtr).(unsafe.Pointer)
-	funcMap := gopointer.Restore(funcMapPtr).(PadFuncMap)
+	funcMap := gopointer.Restore(funcMapPtr).(*PadFuncMap)
 
 	funcMap.RemoveFuncForPad(pad)
 }
