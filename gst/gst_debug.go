@@ -2,6 +2,7 @@ package gst
 
 /*
 #include "gst.go.h"
+#include <gst/gstinfo.h>
 
 extern void goLogFunction(GstDebugCategory * category,
                           GstDebugLevel level,
@@ -100,6 +101,31 @@ const (
 	LevelTrace   DebugLevel = C.GST_LEVEL_TRACE   // (7) – Tracing-related messages. Examples for this are referencing/dereferencing of objects.
 	LevelMemDump DebugLevel = C.GST_LEVEL_MEMDUMP // (9) – memory dump messages are used to log (small) chunks of data as memory dumps in the log. They will be displayed as hexdump with ASCII characters.
 )
+
+func (d DebugLevel) String() string {
+	switch d {
+	case LevelNone:
+		return "NONE"
+	case LevelError:
+		return "ERROR"
+	case LevelWarning:
+		return "WARNING"
+	case LevelFixMe:
+		return "FIXME"
+	case LevelInfo:
+		return "INFO"
+	case LevelDebug:
+		return "DEBUG"
+	case LevelLog:
+		return "LOG"
+	case LevelTrace:
+		return "TRACE"
+	case LevelMemDump:
+		return "MEMDUMP"
+	default:
+		return "UNKNOWN"
+	}
+}
 
 // StackTraceFlags are flags for configuring stack traces
 type StackTraceFlags int
@@ -248,4 +274,15 @@ func SetLogFunction(f LogFunction) {
 		C.cgoSetLogFunction()
 	}
 	customLogFunction = f
+}
+
+func SetDebugThresholdFromString(list string, reset bool) {
+	cList := C.CString(list)
+	defer C.free(unsafe.Pointer(cList))
+
+	C.gst_debug_set_threshold_from_string(cList, gboolean(reset))
+}
+
+func SetDebugDefaultThreshold(level DebugLevel) {
+	C.gst_debug_set_default_threshold(C.GstDebugLevel(level))
 }
