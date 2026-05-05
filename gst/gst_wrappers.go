@@ -460,7 +460,7 @@ func marshalPad(p unsafe.Pointer) (interface{}, error) {
 
 func marshalMessage(p unsafe.Pointer) (interface{}, error) {
 	c := C.g_value_get_boxed(toGValue(p))
-	return &Message{(*C.GstMessage)(unsafe.Pointer(c))}, nil
+	return FromGstMessageUnsafeNone(unsafe.Pointer(c)), nil
 }
 
 func marshalObject(p unsafe.Pointer) (interface{}, error) {
@@ -506,80 +506,77 @@ func marshalBin(p unsafe.Pointer) (interface{}, error) {
 }
 
 func marshalAllocationParams(p unsafe.Pointer) (interface{}, error) {
-	c := C.g_value_get_object(toGValue(p))
-	obj := (*C.GstAllocationParams)(unsafe.Pointer(c))
-	return wrapAllocationParams(obj), nil
+	c := C.g_value_get_boxed(toGValue(p))
+	if c == nil {
+		return nil, nil
+	}
+	return wrapAllocationParams(C.gst_allocation_params_copy((*C.GstAllocationParams)(unsafe.Pointer(c)))), nil
 }
 
 func marshalMemory(p unsafe.Pointer) (interface{}, error) {
-	c := C.g_value_get_object(toGValue(p))
-	obj := (*C.GstMemory)(unsafe.Pointer(c))
-	return wrapMemory(obj), nil
+	c := C.g_value_get_boxed(toGValue(p))
+	return FromGstMemoryUnsafeNone(unsafe.Pointer(c)), nil
 }
 
 func marshalBuffer(p unsafe.Pointer) (interface{}, error) {
 	c := C.getBufferValue(toGValue(p))
-	return wrapBuffer(c), nil
+	return FromGstBufferUnsafeNone(unsafe.Pointer(c)), nil
 }
 
 func marshalBufferList(p unsafe.Pointer) (interface{}, error) {
-	c := C.g_value_get_object(toGValue(p))
-	obj := (*C.GstBufferList)(unsafe.Pointer(c))
-	return wrapBufferList(obj), nil
+	c := C.g_value_get_boxed(toGValue(p))
+	return FromGstBufferListUnsafeNone(unsafe.Pointer(c)), nil
 }
 
 func marshalCaps(p unsafe.Pointer) (interface{}, error) {
 	c := C.gst_value_get_caps(toGValue(p))
-	obj := (*C.GstCaps)(unsafe.Pointer(c))
-	return wrapCaps(obj), nil
+	return FromGstCapsUnsafeNone(unsafe.Pointer(c)), nil
 }
 
 func marshalCapsFeatures(p unsafe.Pointer) (interface{}, error) {
 	c := C.gst_value_get_caps_features(toGValue(p))
-	obj := (*C.GstCapsFeatures)(unsafe.Pointer(c))
-	return wrapCapsFeatures(obj), nil
+	if c == nil {
+		return nil, nil
+	}
+	return wrapCapsFeatures(C.gst_caps_features_copy(c)), nil
 }
 
 func marshalContext(p unsafe.Pointer) (interface{}, error) {
-	c := C.g_value_get_object(toGValue(p))
-	obj := (*C.GstContext)(unsafe.Pointer(c))
-	return wrapContext(obj), nil
+	c := C.g_value_get_boxed(toGValue(p))
+	return FromGstContextUnsafeNone(unsafe.Pointer(c)), nil
 }
 
 func marshalTOC(p unsafe.Pointer) (interface{}, error) {
-	c := C.gst_value_get_structure(toGValue(p))
-	obj := (*C.GstToc)(unsafe.Pointer(c))
-	return wrapTOC(obj), nil
+	c := C.g_value_get_boxed(toGValue(p))
+	return FromGstTOCUnsafeNone(unsafe.Pointer(c)), nil
 }
 
 func marshalTOCEntry(p unsafe.Pointer) (interface{}, error) {
-	c := C.gst_value_get_structure(toGValue(p))
-	obj := (*C.GstTocEntry)(unsafe.Pointer(c))
-	return wrapTOCEntry(obj), nil
+	c := C.g_value_get_boxed(toGValue(p))
+	return FromGstTocEntryUnsafeNone(unsafe.Pointer(c)), nil
 }
 
 func marsalTagList(p unsafe.Pointer) (interface{}, error) {
-	c := C.g_value_get_object(toGValue(p))
-	obj := (*C.GstTagList)(unsafe.Pointer(c))
-	return wrapTagList(obj), nil
+	c := C.g_value_get_boxed(toGValue(p))
+	return FromGstTagListUnsafeNone(unsafe.Pointer(c)), nil
 }
 
 func marshalEvent(p unsafe.Pointer) (interface{}, error) {
-	c := C.g_value_get_object(toGValue(p))
-	obj := (*C.GstEvent)(unsafe.Pointer(c))
-	return wrapEvent(obj), nil
+	c := C.g_value_get_boxed(toGValue(p))
+	return FromGstEventUnsafeNone(unsafe.Pointer(c)), nil
 }
 
 func marshalSegment(p unsafe.Pointer) (interface{}, error) {
-	c := C.g_value_get_object(toGValue(p))
-	obj := (*C.GstSegment)(unsafe.Pointer(c))
-	return wrapSegment(obj), nil
+	c := C.g_value_get_boxed(toGValue(p))
+	if c == nil {
+		return nil, nil
+	}
+	return wrapSegment(C.gst_segment_copy((*C.GstSegment)(unsafe.Pointer(c)))), nil
 }
 
 func marshalQuery(p unsafe.Pointer) (interface{}, error) {
-	c := C.g_value_get_object(toGValue(p))
-	obj := (*C.GstQuery)(unsafe.Pointer(c))
-	return wrapQuery(obj), nil
+	c := C.g_value_get_boxed(toGValue(p))
+	return FromGstQueryUnsafeNone(unsafe.Pointer(c)), nil
 }
 
 func marshalSample(p unsafe.Pointer) (interface{}, error) {
