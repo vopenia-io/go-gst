@@ -221,7 +221,7 @@ func (s *Structure) ToGValue() (*glib.Value, error) {
 	if s != nil {
 		C.gst_value_set_structure(
 			(*C.GValue)(unsafe.Pointer(val.GValue)),
-			s.copy(),
+			s.Instance(),
 		)
 	}
 
