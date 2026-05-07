@@ -102,3 +102,23 @@ func NewEventDownstreamForceKeyUnit(timestamp, streamTime, runningTime gst.Clock
 	}
 	return gst.ToGstEvent(unsafe.Pointer(C.gst_video_event_new_downstream_force_key_unit(C.GstClockTime(timestamp), C.GstClockTime(streamTime), C.GstClockTime(runningTime), C.gboolean(b), C.guint(count))))
 }
+
+func EventIsForceKeyUnit(event *gst.Event) bool {
+	return gobool(C.gst_video_event_is_force_key_unit((*C.GstEvent)(unsafe.Pointer(event.Instance()))))
+}
+
+func EventParseUpstreamForceKeyUnit(event *gst.Event) (runningTime gst.ClockTime, allHeaders bool, count uint) {
+	var gRunningTime C.GstClockTime
+	var gAllHeaders C.gboolean
+	var gCount C.guint
+	C.gst_video_event_parse_upstream_force_key_unit((*C.GstEvent)(unsafe.Pointer(event.Instance())), &gRunningTime, &gAllHeaders, &gCount)
+	return gst.ClockTime(gRunningTime), gobool(gAllHeaders), uint(gCount)
+}
+
+func EventParseDownstreamForceKeyUnit(event *gst.Event) (timestamp, streamTime, runningTime gst.ClockTime, allHeaders bool, count uint) {
+	var gTimestamp, gStreamTime, gRunningTime C.GstClockTime
+	var gAllHeaders C.gboolean
+	var gCount C.guint
+	C.gst_video_event_parse_downstream_force_key_unit((*C.GstEvent)(unsafe.Pointer(event.Instance())), &gTimestamp, &gStreamTime, &gRunningTime, &gAllHeaders, &gCount)
+	return gst.ClockTime(gTimestamp), gst.ClockTime(gStreamTime), gst.ClockTime(gRunningTime), gobool(gAllHeaders), uint(gCount)
+}
