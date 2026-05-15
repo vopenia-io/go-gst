@@ -306,6 +306,11 @@ func (e *Element) GetClock() *Clock {
 	return FromGstClockUnsafeFull(unsafe.Pointer(cClock))
 }
 
+func (e *Element) GetCurrentRunningTime() time.Duration {
+	cTime := C.gst_element_get_current_running_time((*C.GstElement)(e.Instance()))
+	return time.Duration(cTime) * time.Nanosecond
+}
+
 // SetClock sets the clock for this element. This is usually only needed for top-level elements like Pipeline. Setting the clock on sub-elements of a pipeline will not have any effect, as they will automatically use the clock of the pipeline when they are linked to it.
 func (e *Element) SetClock(clock *Clock) {
 	C.gst_element_set_clock((*C.GstElement)(e.Instance()), clock.Instance())
