@@ -316,6 +316,38 @@ func (e *Element) SetClock(clock *Clock) {
 	C.gst_element_set_clock((*C.GstElement)(e.Instance()), clock.Instance())
 }
 
+// SetContext sets the context of the element. When called on a Bin (including Pipeline) the
+// context is propagated to all of its children.
+func (e *Element) SetContext(ctx *Context) {
+	C.gst_element_set_context(e.Instance(), ctx.Instance())
+}
+
+// GetContext returns the cached context of the given type on this element, or nil if no
+// such context has been set. The returned context is owned by the caller.
+func (e *Element) GetContext(ctxType string) *Context {
+	cStr := C.CString(ctxType)
+	defer C.free(unsafe.Pointer(cStr))
+	ctx := C.gst_element_get_context(e.Instance(), (*C.gchar)(unsafe.Pointer(cStr)))
+	if ctx == nil {
+		return nil
+	}
+	return FromGstContextUnsafeFull(unsafe.Pointer(ctx))
+}
+
+// GetContexts returns all currently cached contexts on this element.
+func (e *Element) GetContexts() []*Context {
+	head := C.gst_element_get_contexts(e.Instance())
+	if head == nil {
+		return nil
+	}
+	var out []*Context
+	for l := head; l != nil; l = l.next {
+		out = append(out, FromGstContextUnsafeFull(unsafe.Pointer(l.data)))
+	}
+	C.g_list_free(head)
+	return out
+}
+
 // GetFactory returns the factory that created this element. No refcounting is needed.
 func (e *Element) GetFactory() *ElementFactory {
 	factory := C.gst_element_get_factory((*C.GstElement)(e.Instance()))
