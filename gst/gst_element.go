@@ -264,7 +264,7 @@ func (e *Element) ErrorMessage(domain Domain, code ErrorCode, text, debug string
 func (e *Element) MessageFull(msgType MessageType, domain Domain, code ErrorCode, text, debug, file, function string, line int) {
 	var cTxt, cDbg unsafe.Pointer = nil, nil
 	if text != "" {
-		ctxtstr := C.CString(debug)
+		ctxtstr := C.CString(text)
 		defer C.free(unsafe.Pointer(ctxtstr))
 		cTxt = unsafe.Pointer(C.g_strdup((*C.gchar)(unsafe.Pointer(ctxtstr))))
 	}
@@ -276,7 +276,7 @@ func (e *Element) MessageFull(msgType MessageType, domain Domain, code ErrorCode
 	C.gst_element_message_full(
 		e.Instance(),
 		C.GstMessageType(msgType),
-		domain.toQuark(),
+		C.GQuark(domain.ToDomainQuark()),
 		C.gint(code),
 		(*C.gchar)(cTxt),
 		(*C.gchar)(cDbg),

@@ -140,6 +140,7 @@ func (m *Message) parseToError() *GError {
 	return &GError{
 		errMsg:    C.GoString(gerr.message),
 		structure: m.GetStructure(),
+		domain:    glib.Quark(gerr.domain),
 		debugStr:  strings.TrimSpace(C.GoString((*C.gchar)(debugInfo))),
 		code:      ErrorCode(gerr.code),
 	}

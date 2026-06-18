@@ -4,30 +4,35 @@ package gst
 #include "gst.go.h"
 */
 import "C"
+import "github.com/go-gst/go-glib/glib"
 
 // Domain represents the different types of error domains.
-type Domain string
+type Domain interface {
+	ToDomainQuark() glib.Quark
+}
+
+type domain string
 
 // ErrorDomain castings
 const (
-	DomainCore     Domain = "CORE"
-	DomainLibrary  Domain = "LIBRARY"
-	DomainResource Domain = "RESOURCE"
-	DomainStream   Domain = "STREAM"
+	DomainCore     domain = "CORE"
+	DomainLibrary  domain = "LIBRARY"
+	DomainResource domain = "RESOURCE"
+	DomainStream   domain = "STREAM"
 )
 
-func (d Domain) toQuark() C.GQuark {
+func (d domain) ToDomainQuark() glib.Quark {
 	switch d {
 	case DomainCore:
-		return C.gst_core_error_quark()
+		return glib.Quark(C.gst_core_error_quark())
 	case DomainLibrary:
-		return C.gst_library_error_quark()
+		return glib.Quark(C.gst_library_error_quark())
 	case DomainResource:
-		return C.gst_resource_error_quark()
+		return glib.Quark(C.gst_resource_error_quark())
 	case DomainStream:
-		return C.gst_stream_error_quark()
+		return glib.Quark(C.gst_stream_error_quark())
 	default:
-		return C.gst_library_error_quark()
+		return glib.Quark(C.gst_library_error_quark())
 	}
 }
 
@@ -103,7 +108,7 @@ const (
 type GError struct {
 	errMsg, debugStr string
 	structure        *Structure
-
+	domain           glib.Quark
 	// used for message constructors
 	code ErrorCode
 }
@@ -123,6 +128,8 @@ func (e *GError) Structure() *Structure { return e.structure }
 
 // Code returns the error code of the error message.
 func (e *GError) Code() ErrorCode { return e.code }
+
+func (e *GError) Domain() glib.Quark { return e.domain }
 
 // NewGError wraps the given error inside a GError (to be used with message constructors).
 func NewGError(code ErrorCode, err error) *GError {

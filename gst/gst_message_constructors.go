@@ -186,7 +186,7 @@ func NewErrorMessage(src GstObjectHolder, err error, debugStr string, structure 
 	}
 
 	errmsg := C.CString(err.Error())
-	gerr := C.g_error_new_literal(DomainLibrary.toQuark(), C.gint(LibraryErrorFailed), (*C.gchar)(errmsg))
+	gerr := C.g_error_new_literal(C.GQuark(DomainLibrary.ToDomainQuark()), C.gint(LibraryErrorFailed), (*C.gchar)(errmsg))
 	defer C.free(unsafe.Pointer(errmsg))
 	defer C.g_error_free(gerr)
 
@@ -229,7 +229,7 @@ func NewInfoMessage(src GstObjectHolder, msg string, debugStr string, structure 
 	}
 
 	errmsg := C.CString(msg)
-	gerr := C.g_error_new_literal(DomainLibrary.toQuark(), C.gint(0), (*C.gchar)(errmsg))
+	gerr := C.g_error_new_literal(C.GQuark(DomainLibrary.ToDomainQuark()), C.gint(0), (*C.gchar)(errmsg))
 	defer C.free(unsafe.Pointer(errmsg))
 	defer C.g_error_free(gerr)
 
@@ -615,7 +615,7 @@ func NewWarningMessage(src GstObjectHolder, msg string, debugStr string, structu
 	}
 
 	errmsg := C.CString(msg)
-	gerr := C.g_error_new_literal(DomainLibrary.toQuark(), C.gint(0), (*C.gchar)(errmsg))
+	gerr := C.g_error_new_literal(C.GQuark(DomainLibrary.ToDomainQuark()), C.gint(0), (*C.gchar)(errmsg))
 	defer C.free(unsafe.Pointer(errmsg))
 	defer C.g_error_free(gerr)
 

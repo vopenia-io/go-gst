@@ -53,7 +53,7 @@ func goURIHdlrSetURI(hdlr *C.GstURIHandler, uri *C.gchar, gerr **C.GError) C.gbo
 	if err != nil {
 		errMsg := C.CString(err.Error())
 		defer C.free(unsafe.Pointer(errMsg))
-		C.g_set_error_literal(gerr, DomainLibrary.toQuark(), C.gint(LibraryErrorSettings), errMsg)
+		C.g_set_error_literal(gerr, C.GQuark(DomainLibrary.ToDomainQuark()), C.gint(LibraryErrorSettings), errMsg)
 	}
 	return gboolean(ok)
 }
